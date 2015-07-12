@@ -1,0 +1,37 @@
+elasticsearch:
+  build: elasticsearch/
+  volumes_from:
+    - esdata
+  volumes:
+    - elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+
+kibana:
+  build: kibana/
+  ports:
+    - 5601:5601
+  links:
+    - elasticsearch:es
+  command: -c "${KIBANA_HOME}/bin/kibana -e http://${ES_PORT_9200_TCP_ADDR}:${ES_PORT_9200_TCP_PORT}"
+
+logstash:
+  build: logstash/
+  volumes:
+    - logstash/conf:/etc/logstash/conf.d
+  links:
+    - elasticsearch:es
+  ports:
+    - 5000:5000
+
+client:
+  build: logstash-client/
+  volumes:
+    - logstash-client/logstash-forwarder.conf:/etc/logstash-forwarder.conf
+  links:
+    - logstash:logstash
+  volumes_from:
+    - logstash
+
+esdata:
+  image: busybox
+  volumes:
+    - /var/lib/elasticsearch
