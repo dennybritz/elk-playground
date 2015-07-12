@@ -6,7 +6,7 @@ Start the services in the background:
 docker-compose up -d
 ```
 
-You should now be able to visit to visit the Kibana Dashboard at <YOUR_DOCKER_UP>:5601. To scale up the number of clients, simply do:
+You should now be able to visit to visit the Kibana Dashboard at `<YOUR_DOCKER_HOST>:5601`. To scale up the number of clients, simply do:
 
 
 ```
